@@ -1,0 +1,9 @@
+services:
+  grabpass:
+    image: node:22.9.0-slim
+    container_name: grabpass
+    tty: true
+    stdin_open: true
+    volumes:
+      - .:/grabpass
+    working_dir: /grabpass
