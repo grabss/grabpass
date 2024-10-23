@@ -1,0 +1,39 @@
+{
+  "name": "grabpass",
+  "version": "0.1.0",
+  "description": "A simple and minimal token-based stateless authentication for Node.js.",
+  "license": "MIT",
+  "author": "grabss Inc.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/grabss/grabpass.git"
+  },
+  "keywords": [
+    "nodejs",
+    "typescript",
+    "minimal",
+    "auth"
+  ],
+  "scripts": {
+    "build": "tsc -b -v",
+    "lint": "prettier --check . && eslint .",
+    "format": "prettier --write ."
+  },
+  "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
+    "@types/jsonwebtoken": "^9.0.7",
+    "@types/node": "^22.7.8",
+    "@typescript-eslint/eslint-plugin": "^8.11.0",
+    "@typescript-eslint/parser": "^8.11.0",
+    "eslint": "^9.13.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.2.1",
+    "prettier": "^3.3.3",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.6.3"
+  },
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "jsonwebtoken": "^9.0.2"
+  }
+}
