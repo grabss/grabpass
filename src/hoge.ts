@@ -1,3 +1,3 @@
 export function hoge(): string {
-  return 'Hoge';
+  return 'Hoge'
 }
