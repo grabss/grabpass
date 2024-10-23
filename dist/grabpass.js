@@ -23,26 +23,41 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createAuthTokens = createAuthTokens;
-exports.verifyAccessToken = verifyAccessToken;
-exports.verifyRefreshToken = verifyRefreshToken;
+exports.Grabpass = void 0;
 const jwt = __importStar(require("jsonwebtoken"));
-function createAuthTokens({ accessTokenPayload, refreshTokenPayload }) {
-    return {
-        accessToken: jwt.sign(accessTokenPayload, 'default_secret', {
-            algorithm: 'HS256',
-            expiresIn: '30m'
-        }),
-        refreshToken: jwt.sign(refreshTokenPayload, 'default_secret', {
-            algorithm: 'HS256',
-            expiresIn: '30d'
-        })
-    };
+const DEFAULT_GRABPASS_CONFIG = {
+    algorithm: 'HS256',
+    accessTokenExpiresIn: '30m',
+    refreshTokenExpiresIn: '30d'
+};
+class Grabpass {
+    constructor(args) {
+        this.config = {
+            ...DEFAULT_GRABPASS_CONFIG,
+            ...args.config
+        };
+    }
+    createAuthTokens({ accessTokenPayload, refreshTokenPayload }) {
+        return {
+            accessToken: jwt.sign(accessTokenPayload, this.config.secret, {
+                algorithm: this.config.algorithm,
+                expiresIn: this.config.accessTokenExpiresIn
+            }),
+            refreshToken: jwt.sign(refreshTokenPayload, this.config.secret, {
+                algorithm: this.config.algorithm,
+                expiresIn: this.config.refreshTokenExpiresIn
+            })
+        };
+    }
+    verifyAccessToken(token) {
+        return this.verifyToken(token);
+    }
+    verifyRefreshToken(token) {
+        return this.verifyToken(token);
+    }
+    verifyToken(token) {
+        return jwt.verify(token, this.config.secret);
+    }
 }
-function verifyAccessToken(token) {
-    return jwt.verify(token, 'default_secret');
-}
-function verifyRefreshToken(token) {
-    return jwt.verify(token, 'default_secret');
-}
-//# sourceMappingURL=token.js.map
+exports.Grabpass = Grabpass;
+//# sourceMappingURL=grabpass.js.map
