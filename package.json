@@ -16,7 +16,8 @@
   ],
   "scripts": {
     "build": "tsc",
-    "lint": "eslint ."
+    "lint": "prettier --check . && eslint .",
+    "format": "prettier --write ."
   },
   "devDependencies": {
     "@types/node": "^22.7.8",
