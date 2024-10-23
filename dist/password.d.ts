@@ -1,4 +1,4 @@
-export declare function createEncryptedPassword({ plain, saltRounds }: {
+export declare function createHashedPassword({ plain, saltRounds }: {
     plain: string;
     saltRounds?: number;
 }): Promise<string>;

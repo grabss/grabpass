@@ -23,10 +23,10 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createEncryptedPassword = createEncryptedPassword;
+exports.createHashedPassword = createHashedPassword;
 exports.comparePassword = comparePassword;
 const bcrypt = __importStar(require("bcrypt"));
-function createEncryptedPassword({ plain, saltRounds = 10 }) {
+function createHashedPassword({ plain, saltRounds = 10 }) {
     return bcrypt.hash(plain, saltRounds);
 }
 function comparePassword({ plain, encrypted }) {

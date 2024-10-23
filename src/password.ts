@@ -1,6 +1,6 @@
 import * as bcrypt from 'bcrypt'
 
-export function createEncryptedPassword({
+export function createHashedPassword({
   plain,
   saltRounds = 10
 }: {
