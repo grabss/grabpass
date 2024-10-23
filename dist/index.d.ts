@@ -1,1 +1,1 @@
-export * from './hoge';
+export * from './password';
