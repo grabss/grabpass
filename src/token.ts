@@ -14,7 +14,7 @@ export type RefreshTokenPayload = {
   reauthKey: string
 }
 
-export function createAuthToken({
+export function createAuthTokens({
   accessTokenPayload,
   refreshTokenPayload
 }: {

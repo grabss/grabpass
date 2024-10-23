@@ -9,7 +9,7 @@ export type RefreshTokenPayload = {
     id: number;
     reauthKey: string;
 };
-export declare function createAuthToken({ accessTokenPayload, refreshTokenPayload }: {
+export declare function createAuthTokens({ accessTokenPayload, refreshTokenPayload }: {
     accessTokenPayload: AccessTokenPayload;
     refreshTokenPayload: RefreshTokenPayload;
 }): AuthTokens;

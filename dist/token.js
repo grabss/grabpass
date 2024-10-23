@@ -23,11 +23,11 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createAuthToken = createAuthToken;
+exports.createAuthTokens = createAuthTokens;
 exports.verifyAccessToken = verifyAccessToken;
 exports.verifyRefreshToken = verifyRefreshToken;
 const jwt = __importStar(require("jsonwebtoken"));
-function createAuthToken({ accessTokenPayload, refreshTokenPayload }) {
+function createAuthTokens({ accessTokenPayload, refreshTokenPayload }) {
     return {
         accessToken: jwt.sign(accessTokenPayload, 'default_secret', {
             algorithm: 'HS256',
