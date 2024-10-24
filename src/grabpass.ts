@@ -37,10 +37,12 @@ export class Grabpass {
   private config: GrabpassConfig
 
   constructor(args: GrabpassConstructorArgs) {
-    this.config = {
+    const mergedConfig = {
       ...DEFAULT_GRABPASS_CONFIG,
       ...args.config
     }
+    this.validateConfig(mergedConfig)
+    this.config = mergedConfig
   }
 
   createAuthTokens({
@@ -52,18 +54,20 @@ export class Grabpass {
     refreshTokenPayload: RefreshTokenPayload
     config?: Partial<GrabpassConfig>
   }): AuthTokens {
-    const { algorithm, accessTokenExpiresIn, refreshTokenExpiresIn, secret } = {
+    const mergedConfig = {
       ...this.config,
       ...config
     }
+    this.validateConfig(mergedConfig)
+
     return {
-      accessToken: jwt.sign(accessTokenPayload, secret, {
-        algorithm,
-        expiresIn: accessTokenExpiresIn
+      accessToken: jwt.sign(accessTokenPayload, mergedConfig.secret, {
+        algorithm: mergedConfig.algorithm,
+        expiresIn: mergedConfig.accessTokenExpiresIn
       }),
-      refreshToken: jwt.sign(refreshTokenPayload, secret, {
-        algorithm,
-        expiresIn: refreshTokenExpiresIn
+      refreshToken: jwt.sign(refreshTokenPayload, mergedConfig.secret, {
+        algorithm: mergedConfig.algorithm,
+        expiresIn: mergedConfig.refreshTokenExpiresIn
       })
     }
   }
