@@ -79,4 +79,35 @@ export class Grabpass {
   private verifyToken<T>(token: string) {
     return jwt.verify(token, this.config.secret) as T
   }
+
+  private validateConfig(config: GrabpassConfig) {
+    if (process.env.NODE_ENV === 'development') return
+
+    switch (config.algorithm) {
+      case 'HS256': {
+        if (config.secret.length < 32) {
+          throw new Error(
+            'Secret must be at least 32 characters long when using HS256 algorithm.'
+          )
+        }
+        break
+      }
+      case 'HS384': {
+        if (config.secret.length < 48) {
+          throw new Error(
+            'Secret must be at least 48 characters long when using HS384 algorithm.'
+          )
+        }
+        break
+      }
+      case 'HS512': {
+        if (config.secret.length < 64) {
+          throw new Error(
+            'Secret must be at least 64 characters long when using HS512 algorithm.'
+          )
+        }
+        break
+      }
+    }
+  }
 }
