@@ -29,7 +29,7 @@ const bcrypt = __importStar(require("bcrypt"));
 function createHashedPassword({ plain, saltRounds = 10 }) {
     return bcrypt.hash(plain, saltRounds);
 }
-function comparePassword({ plain, encrypted }) {
-    return bcrypt.compare(plain, encrypted);
+function comparePassword({ plain, hashed }) {
+    return bcrypt.compare(plain, hashed);
 }
 //# sourceMappingURL=password.js.map

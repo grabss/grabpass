@@ -12,10 +12,10 @@ export function createHashedPassword({
 
 export function comparePassword({
   plain,
-  encrypted
+  hashed
 }: {
   plain: string
-  encrypted: string
+  hashed: string
 }) {
-  return bcrypt.compare(plain, encrypted)
+  return bcrypt.compare(plain, hashed)
 }
