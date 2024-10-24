@@ -37,27 +37,37 @@ export class Grabpass {
   private config: GrabpassConfig
 
   constructor(args: GrabpassConstructorArgs) {
-    this.config = {
+    const mergedConfig = {
       ...DEFAULT_GRABPASS_CONFIG,
       ...args.config
     }
+    this.validateConfig(mergedConfig)
+    this.config = mergedConfig
   }
 
   createAuthTokens({
     accessTokenPayload,
-    refreshTokenPayload
+    refreshTokenPayload,
+    config
   }: {
     accessTokenPayload: AccessTokenPayload
     refreshTokenPayload: RefreshTokenPayload
+    config?: Partial<GrabpassConfig>
   }): AuthTokens {
+    const mergedConfig = {
+      ...this.config,
+      ...config
+    }
+    this.validateConfig(mergedConfig)
+
     return {
-      accessToken: jwt.sign(accessTokenPayload, this.config.secret, {
-        algorithm: this.config.algorithm,
-        expiresIn: this.config.accessTokenExpiresIn
+      accessToken: jwt.sign(accessTokenPayload, mergedConfig.secret, {
+        algorithm: mergedConfig.algorithm,
+        expiresIn: mergedConfig.accessTokenExpiresIn
       }),
-      refreshToken: jwt.sign(refreshTokenPayload, this.config.secret, {
-        algorithm: this.config.algorithm,
-        expiresIn: this.config.refreshTokenExpiresIn
+      refreshToken: jwt.sign(refreshTokenPayload, mergedConfig.secret, {
+        algorithm: mergedConfig.algorithm,
+        expiresIn: mergedConfig.refreshTokenExpiresIn
       })
     }
   }
@@ -72,5 +82,36 @@ export class Grabpass {
 
   private verifyToken<T>(token: string) {
     return jwt.verify(token, this.config.secret) as T
+  }
+
+  private validateConfig(config: GrabpassConfig) {
+    if (process.env.NODE_ENV === 'development') return
+
+    switch (config.algorithm) {
+      case 'HS256': {
+        if (config.secret.length < 32) {
+          throw new Error(
+            'Secret must be at least 32 characters long when using HS256 algorithm.'
+          )
+        }
+        break
+      }
+      case 'HS384': {
+        if (config.secret.length < 48) {
+          throw new Error(
+            'Secret must be at least 48 characters long when using HS384 algorithm.'
+          )
+        }
+        break
+      }
+      case 'HS512': {
+        if (config.secret.length < 64) {
+          throw new Error(
+            'Secret must be at least 64 characters long when using HS512 algorithm.'
+          )
+        }
+        break
+      }
+    }
   }
 }

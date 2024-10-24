@@ -1,21 +1,9 @@
 import * as bcrypt from 'bcrypt'
 
-export function createHashedPassword({
-  plain,
-  saltRounds = 10
-}: {
-  plain: string
-  saltRounds?: number
-}) {
+export function createHashedPassword(plain: string, saltRounds: number = 10) {
   return bcrypt.hash(plain, saltRounds)
 }
 
-export function comparePassword({
-  plain,
-  encrypted
-}: {
-  plain: string
-  encrypted: string
-}) {
-  return bcrypt.compare(plain, encrypted)
+export function comparePassword(plain: string, hashed: string) {
+  return bcrypt.compare(plain, hashed)
 }
