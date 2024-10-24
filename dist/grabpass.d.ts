@@ -24,9 +24,10 @@ export type GrabpassConstructorArgs = {
 export declare class Grabpass {
     private config;
     constructor(args: GrabpassConstructorArgs);
-    createAuthTokens({ accessTokenPayload, refreshTokenPayload }: {
+    createAuthTokens({ accessTokenPayload, refreshTokenPayload, config }: {
         accessTokenPayload: AccessTokenPayload;
         refreshTokenPayload: RefreshTokenPayload;
+        config?: Partial<GrabpassConfig>;
     }): AuthTokens;
     verifyAccessToken(token: string): AccessTokenPayload;
     verifyRefreshToken(token: string): RefreshTokenPayload;

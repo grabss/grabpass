@@ -45,19 +45,25 @@ export class Grabpass {
 
   createAuthTokens({
     accessTokenPayload,
-    refreshTokenPayload
+    refreshTokenPayload,
+    config
   }: {
     accessTokenPayload: AccessTokenPayload
     refreshTokenPayload: RefreshTokenPayload
+    config?: Partial<GrabpassConfig>
   }): AuthTokens {
+    const { algorithm, accessTokenExpiresIn, refreshTokenExpiresIn, secret } = {
+      ...this.config,
+      ...config
+    }
     return {
-      accessToken: jwt.sign(accessTokenPayload, this.config.secret, {
-        algorithm: this.config.algorithm,
-        expiresIn: this.config.accessTokenExpiresIn
+      accessToken: jwt.sign(accessTokenPayload, secret, {
+        algorithm,
+        expiresIn: accessTokenExpiresIn
       }),
-      refreshToken: jwt.sign(refreshTokenPayload, this.config.secret, {
-        algorithm: this.config.algorithm,
-        expiresIn: this.config.refreshTokenExpiresIn
+      refreshToken: jwt.sign(refreshTokenPayload, secret, {
+        algorithm,
+        expiresIn: refreshTokenExpiresIn
       })
     }
   }
