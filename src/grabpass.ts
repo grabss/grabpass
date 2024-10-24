@@ -62,15 +62,15 @@ export class Grabpass {
     }
   }
 
-  verifyAccessToken(token: string): AccessTokenPayload {
+  verifyAccessToken(token: string) {
     return this.verifyToken<AccessTokenPayload>(token)
   }
 
-  verifyRefreshToken(token: string): RefreshTokenPayload {
+  verifyRefreshToken(token: string) {
     return this.verifyToken<RefreshTokenPayload>(token)
   }
 
-  private verifyToken<T>(token: string): T {
+  private verifyToken<T>(token: string) {
     return jwt.verify(token, this.config.secret) as T
   }
 }
