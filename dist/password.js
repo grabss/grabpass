@@ -26,10 +26,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.createHashedPassword = createHashedPassword;
 exports.comparePassword = comparePassword;
 const bcrypt = __importStar(require("bcrypt"));
-function createHashedPassword({ plain, saltRounds = 10 }) {
+function createHashedPassword(plain, saltRounds = 10) {
     return bcrypt.hash(plain, saltRounds);
 }
-function comparePassword({ plain, hashed }) {
+function comparePassword(plain, hashed) {
     return bcrypt.compare(plain, hashed);
 }
 //# sourceMappingURL=password.js.map
