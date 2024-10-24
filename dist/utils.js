@@ -23,9 +23,9 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createUtilTokenByHmac = createUtilTokenByHmac;
+exports.createHmacToken = createHmacToken;
 const crypto = __importStar(require("crypto"));
-function createUtilTokenByHmac(data) {
+function createHmacToken(data) {
     const createdAt = new Date();
     return {
         token: crypto

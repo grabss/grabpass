@@ -1,6 +1,6 @@
 import * as crypto from 'crypto'
 
-export function createUtilTokenByHmac(data: string): {
+export function createHmacToken(data: string): {
   token: string
   createdAt: Date
 } {

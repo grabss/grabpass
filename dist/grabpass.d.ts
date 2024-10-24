@@ -32,4 +32,5 @@ export declare class Grabpass {
     verifyAccessToken(token: string): AccessTokenPayload;
     verifyRefreshToken(token: string): RefreshTokenPayload;
     private verifyToken;
+    private validateConfig;
 }
