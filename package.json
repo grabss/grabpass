@@ -4,6 +4,7 @@
   "description": "A simple and minimal token-based stateless authentication for Node.js.",
   "license": "MIT",
   "author": "grabss Inc.",
+  "homepage": "https://grabss.co.jp",
   "repository": {
     "type": "git",
     "url": "https://github.com/grabss/grabpass.git"
