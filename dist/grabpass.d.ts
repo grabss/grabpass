@@ -8,7 +8,6 @@ export type AccessTokenPayload = {
 };
 export type RefreshTokenPayload = {
     id: number;
-    reauthKey: string;
 };
 export type GrabpassConfig = {
     algorithm: jwt.Algorithm;
