@@ -54,7 +54,7 @@ class Grabpass {
                 algorithm: accessTokenConfig.algorithm,
                 expiresIn: accessTokenConfig.accessTokenExpiresIn
             }),
-            refreshToken: jwt.sign(refreshTokenData, this.getSignKey(refreshTokenConfig), {
+            refreshToken: jwt.sign(refreshTokenData.payload, this.getSignKey(refreshTokenConfig), {
                 algorithm: refreshTokenConfig.algorithm,
                 expiresIn: refreshTokenConfig.refreshTokenExpiresIn
             })
