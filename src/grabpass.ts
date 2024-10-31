@@ -27,13 +27,13 @@ export type GrabpassConfig = {
   algorithm: jwt.Algorithm
   accessTokenExpiresIn: string
   refreshTokenExpiresIn: string
-  secret: string
+  secret?: jwt.Secret
+  publicKey?: jwt.PublicKey
+  privateKey?: jwt.PrivateKey
 }
 
 export type GrabpassConstructorArgs = {
-  config: Partial<Omit<GrabpassConfig, 'secret'>> & {
-    secret: string
-  }
+  config: Partial<GrabpassConfig>
 }
 
 const DEFAULT_GRABPASS_CONFIG = {
@@ -72,27 +72,59 @@ export class Grabpass {
     this.validateConfig([accessTokenConfig, refreshTokenConfig])
 
     return {
-      accessToken: jwt.sign(accessTokenData.payload, accessTokenConfig.secret, {
-        algorithm: accessTokenConfig.algorithm,
-        expiresIn: accessTokenConfig.accessTokenExpiresIn
-      }),
-      refreshToken: jwt.sign(refreshTokenData, refreshTokenConfig.secret, {
-        algorithm: refreshTokenConfig.algorithm,
-        expiresIn: refreshTokenConfig.refreshTokenExpiresIn
-      })
+      accessToken: jwt.sign(
+        accessTokenData.payload,
+        this.getSignKey(accessTokenConfig),
+        {
+          algorithm: accessTokenConfig.algorithm,
+          expiresIn: accessTokenConfig.accessTokenExpiresIn
+        }
+      ),
+      refreshToken: jwt.sign(
+        refreshTokenData,
+        this.getSignKey(refreshTokenConfig),
+        {
+          algorithm: refreshTokenConfig.algorithm,
+          expiresIn: refreshTokenConfig.refreshTokenExpiresIn
+        }
+      )
     }
   }
 
-  verifyAccessToken(token: string) {
-    return this.verifyToken<AccessTokenPayload>(token)
+  verifyAccessToken(token: string, config?: Partial<GrabpassConfig>) {
+    return this.verifyToken<AccessTokenPayload>(token, config)
   }
 
-  verifyRefreshToken(token: string) {
-    return this.verifyToken<RefreshTokenPayload>(token)
+  verifyRefreshToken(token: string, config?: Partial<GrabpassConfig>) {
+    return this.verifyToken<RefreshTokenPayload>(token, config)
   }
 
-  private verifyToken<T>(token: string) {
-    return jwt.verify(token, this.config.secret) as T
+  private getSignKey(config: GrabpassConfig): jwt.Secret | jwt.PrivateKey {
+    if (config.algorithm.startsWith('HS')) {
+      if (!config.secret) {
+        throw new Error('Secret is required for HMAC algorithms.')
+      }
+      return config.secret
+    } else {
+      if (!config.privateKey) {
+        throw new Error('Private key is required for RSA/ECDSA algorithms.')
+      }
+      return config.privateKey
+    }
+  }
+
+  private getVerifyKey(config: GrabpassConfig): jwt.Secret | jwt.PublicKey {
+    if (config.algorithm.startsWith('HS')) {
+      if (!config.secret) {
+        throw new Error('Secret is required for HMAC algorithms.')
+      }
+      return config.secret
+    } else {
+      if (!config.publicKey) {
+        throw new Error('Public key is required for RSA/ECDSA algorithms.')
+      }
+      return config.publicKey
+    }
   }
 
   private validateConfig(config: GrabpassConfig | GrabpassConfig[]) {
@@ -110,8 +142,39 @@ export class Grabpass {
     }
 
     switch (config.algorithm) {
+      case 'HS256':
+      case 'HS384':
+      case 'HS512': {
+        if (!config.secret) {
+          throw new Error('Secret is required when using HMAC algorithm.')
+        } else if (typeof config.secret === 'string') {
+          this.validateHmacSecretLength(config.secret, config.algorithm)
+        }
+        break
+      }
+      case 'RS256':
+      case 'RS384':
+      case 'RS512':
+      case 'ES256':
+      case 'ES384':
+      case 'ES512': {
+        if (!config.privateKey || !config.publicKey) {
+          throw new Error(
+            'Both private and public keys are required for RSA/ECDSA algorithms.'
+          )
+        }
+        break
+      }
+    }
+  }
+
+  private validateHmacSecretLength(
+    secret: string,
+    algorithm: 'HS256' | 'HS384' | 'HS512'
+  ) {
+    switch (algorithm) {
       case 'HS256': {
-        if (config.secret.length < 32) {
+        if (secret.length < 32) {
           throw new Error(
             'Secret must be at least 32 characters long when using HS256 algorithm.'
           )
@@ -119,7 +182,7 @@ export class Grabpass {
         break
       }
       case 'HS384': {
-        if (config.secret.length < 48) {
+        if (secret.length < 48) {
           throw new Error(
             'Secret must be at least 48 characters long when using HS384 algorithm.'
           )
@@ -127,7 +190,7 @@ export class Grabpass {
         break
       }
       case 'HS512': {
-        if (config.secret.length < 64) {
+        if (secret.length < 64) {
           throw new Error(
             'Secret must be at least 64 characters long when using HS512 algorithm.'
           )
@@ -135,5 +198,15 @@ export class Grabpass {
         break
       }
     }
+  }
+
+  private verifyToken<T>(token: string, config?: Partial<GrabpassConfig>) {
+    const verifyConfig = {
+      ...this.config,
+      ...config
+    }
+    this.validateConfig(verifyConfig)
+
+    return jwt.verify(token, this.getVerifyKey(verifyConfig)) as T
   }
 }

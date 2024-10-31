@@ -21,12 +21,12 @@ export type GrabpassConfig = {
     algorithm: jwt.Algorithm;
     accessTokenExpiresIn: string;
     refreshTokenExpiresIn: string;
-    secret: string;
+    secret?: jwt.Secret;
+    publicKey?: jwt.PublicKey;
+    privateKey?: jwt.PrivateKey;
 };
 export type GrabpassConstructorArgs = {
-    config: Partial<Omit<GrabpassConfig, 'secret'>> & {
-        secret: string;
-    };
+    config: Partial<GrabpassConfig>;
 };
 export declare class Grabpass {
     private config;
@@ -35,8 +35,11 @@ export declare class Grabpass {
         accessTokenData: AccessTokenData;
         refreshTokenData: RefreshTokenData;
     }): AuthTokens;
-    verifyAccessToken(token: string): AccessTokenPayload;
-    verifyRefreshToken(token: string): RefreshTokenPayload;
-    private verifyToken;
+    verifyAccessToken(token: string, config?: Partial<GrabpassConfig>): AccessTokenPayload;
+    verifyRefreshToken(token: string, config?: Partial<GrabpassConfig>): RefreshTokenPayload;
+    private getSignKey;
+    private getVerifyKey;
     private validateConfig;
+    private validateHmacSecretLength;
+    private verifyToken;
 }
