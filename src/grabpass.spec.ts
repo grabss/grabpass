@@ -85,4 +85,15 @@ describe('Grabpass', () => {
       'Algorithm "none" is not allowed.'
     )
   })
+
+  it('should throw error for short secret with HS256', () => {
+    const invalidConfig: GrabpassConfig = {
+      ...defaultConfig,
+      secret: 'short'
+    }
+
+    expect(() => new Grabpass({ config: invalidConfig })).toThrow(
+      'Secret must be at least 32 characters long when using HS256 algorithm.'
+    )
+  })
 })
