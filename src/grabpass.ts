@@ -9,8 +9,18 @@ export type AccessTokenPayload = {
   id: number
 }
 
+export type AccessTokenData = {
+  payload: AccessTokenPayload
+  config?: Partial<GrabpassConfig>
+}
+
 export type RefreshTokenPayload = {
   id: number
+}
+
+export type RefreshTokenData = {
+  payload: RefreshTokenPayload
+  config?: Partial<GrabpassConfig>
 }
 
 export type GrabpassConfig = {
@@ -36,37 +46,39 @@ export class Grabpass {
   private config: GrabpassConfig
 
   constructor(args: GrabpassConstructorArgs) {
-    const mergedConfig = {
+    const config = {
       ...DEFAULT_GRABPASS_CONFIG,
       ...args.config
     }
-    this.validateConfig(mergedConfig)
-    this.config = mergedConfig
+    this.validateConfig(config)
+    this.config = config
   }
 
   createAuthTokens({
-    accessTokenPayload,
-    refreshTokenPayload,
-    config
+    accessTokenData,
+    refreshTokenData
   }: {
-    accessTokenPayload: AccessTokenPayload
-    refreshTokenPayload: RefreshTokenPayload
-    config?: Partial<GrabpassConfig>
+    accessTokenData: AccessTokenData
+    refreshTokenData: RefreshTokenData
   }): AuthTokens {
-    const mergedConfig = {
+    const accessTokenConfig = {
       ...this.config,
-      ...config
+      ...accessTokenData.config
     }
-    this.validateConfig(mergedConfig)
+    const refreshTokenConfig = {
+      ...this.config,
+      ...refreshTokenData.config
+    }
+    this.validateConfig([accessTokenConfig, refreshTokenConfig])
 
     return {
-      accessToken: jwt.sign(accessTokenPayload, mergedConfig.secret, {
-        algorithm: mergedConfig.algorithm,
-        expiresIn: mergedConfig.accessTokenExpiresIn
+      accessToken: jwt.sign(accessTokenData.payload, accessTokenConfig.secret, {
+        algorithm: accessTokenConfig.algorithm,
+        expiresIn: accessTokenConfig.accessTokenExpiresIn
       }),
-      refreshToken: jwt.sign(refreshTokenPayload, mergedConfig.secret, {
-        algorithm: mergedConfig.algorithm,
-        expiresIn: mergedConfig.refreshTokenExpiresIn
+      refreshToken: jwt.sign(refreshTokenData, refreshTokenConfig.secret, {
+        algorithm: refreshTokenConfig.algorithm,
+        expiresIn: refreshTokenConfig.refreshTokenExpiresIn
       })
     }
   }
@@ -83,8 +95,15 @@ export class Grabpass {
     return jwt.verify(token, this.config.secret) as T
   }
 
-  private validateConfig(config: GrabpassConfig) {
+  private validateConfig(config: GrabpassConfig | GrabpassConfig[]) {
     if (process.env.NODE_ENV === 'development') return
+
+    if (Array.isArray(config)) {
+      for (const c of config) {
+        this.validateConfig(c)
+      }
+      return
+    }
 
     switch (config.algorithm) {
       case 'HS256': {
