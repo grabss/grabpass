@@ -32,62 +32,134 @@ const DEFAULT_GRABPASS_CONFIG = {
 };
 class Grabpass {
     constructor(args) {
-        const mergedConfig = {
+        const config = {
             ...DEFAULT_GRABPASS_CONFIG,
             ...args.config
         };
-        this.validateConfig(mergedConfig);
-        this.config = mergedConfig;
+        this.validateConfig(config);
+        this.config = config;
     }
-    createAuthTokens({ accessTokenPayload, refreshTokenPayload, config }) {
-        const mergedConfig = {
+    createAuthTokens({ accessTokenData, refreshTokenData }) {
+        const accessTokenConfig = {
             ...this.config,
-            ...config
+            ...accessTokenData.config
         };
-        this.validateConfig(mergedConfig);
+        const refreshTokenConfig = {
+            ...this.config,
+            ...refreshTokenData.config
+        };
+        this.validateConfig([accessTokenConfig, refreshTokenConfig]);
         return {
-            accessToken: jwt.sign(accessTokenPayload, mergedConfig.secret, {
-                algorithm: mergedConfig.algorithm,
-                expiresIn: mergedConfig.accessTokenExpiresIn
+            accessToken: jwt.sign(accessTokenData.payload, this.getSignKey(accessTokenConfig), {
+                algorithm: accessTokenConfig.algorithm,
+                expiresIn: accessTokenConfig.accessTokenExpiresIn
             }),
-            refreshToken: jwt.sign(refreshTokenPayload, mergedConfig.secret, {
-                algorithm: mergedConfig.algorithm,
-                expiresIn: mergedConfig.refreshTokenExpiresIn
+            refreshToken: jwt.sign(refreshTokenData, this.getSignKey(refreshTokenConfig), {
+                algorithm: refreshTokenConfig.algorithm,
+                expiresIn: refreshTokenConfig.refreshTokenExpiresIn
             })
         };
     }
-    verifyAccessToken(token) {
-        return this.verifyToken(token);
+    verifyAccessToken(token, config) {
+        return this.verifyToken(token, config);
     }
-    verifyRefreshToken(token) {
-        return this.verifyToken(token);
+    verifyRefreshToken(token, config) {
+        return this.verifyToken(token, config);
     }
-    verifyToken(token) {
-        return jwt.verify(token, this.config.secret);
+    getSignKey(config) {
+        if (config.algorithm.startsWith('HS')) {
+            if (!config.secret) {
+                throw new Error('Secret is required for HMAC algorithms.');
+            }
+            return config.secret;
+        }
+        else {
+            if (!config.privateKey) {
+                throw new Error('Private key is required for RSA/ECDSA algorithms.');
+            }
+            return config.privateKey;
+        }
+    }
+    getVerifyKey(config) {
+        if (config.algorithm.startsWith('HS')) {
+            if (!config.secret) {
+                throw new Error('Secret is required for HMAC algorithms.');
+            }
+            return config.secret;
+        }
+        else {
+            if (!config.publicKey) {
+                throw new Error('Public key is required for RSA/ECDSA algorithms.');
+            }
+            return config.publicKey;
+        }
     }
     validateConfig(config) {
         if (process.env.NODE_ENV === 'development')
             return;
+        if (Array.isArray(config)) {
+            for (const c of config) {
+                this.validateConfig(c);
+            }
+            return;
+        }
+        if (config.algorithm === 'none') {
+            throw new Error('Algorithm "none" is not allowed.');
+        }
         switch (config.algorithm) {
+            case 'HS256':
+            case 'HS384':
+            case 'HS512': {
+                if (!config.secret) {
+                    throw new Error('Secret is required when using HMAC algorithm.');
+                }
+                else if (typeof config.secret === 'string') {
+                    this.validateHmacSecretLength(config.secret, config.algorithm);
+                }
+                break;
+            }
+            case 'RS256':
+            case 'RS384':
+            case 'RS512':
+            case 'ES256':
+            case 'ES384':
+            case 'ES512': {
+                if (!config.privateKey || !config.publicKey) {
+                    throw new Error('Both private and public keys are required for RSA/ECDSA algorithms.');
+                }
+                break;
+            }
+        }
+    }
+    validateHmacSecretLength(secret, algorithm) {
+        switch (algorithm) {
             case 'HS256': {
-                if (config.secret.length < 32) {
+                if (secret.length < 32) {
                     throw new Error('Secret must be at least 32 characters long when using HS256 algorithm.');
                 }
                 break;
             }
             case 'HS384': {
-                if (config.secret.length < 48) {
+                if (secret.length < 48) {
                     throw new Error('Secret must be at least 48 characters long when using HS384 algorithm.');
                 }
                 break;
             }
             case 'HS512': {
-                if (config.secret.length < 64) {
+                if (secret.length < 64) {
                     throw new Error('Secret must be at least 64 characters long when using HS512 algorithm.');
                 }
                 break;
             }
         }
+    }
+    verifyToken(token, config) {
+        const verifyConfig = {
+            ...this.config,
+            ...config
+        };
+        this.validateConfig(verifyConfig);
+        return jwt.verify(token, this.getVerifyKey(verifyConfig));
     }
 }
 exports.Grabpass = Grabpass;

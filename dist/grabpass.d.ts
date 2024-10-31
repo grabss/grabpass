@@ -8,29 +8,40 @@ export type AccessTokenPayload = {
 };
 export type RefreshTokenPayload = {
     id: number;
-    reauthKey: string;
+};
+export type AccessTokenData = {
+    payload: AccessTokenPayload;
+    config?: PartialGrabpassConfig;
+};
+export type RefreshTokenData = {
+    payload: RefreshTokenPayload;
+    config?: PartialGrabpassConfig;
 };
 export type GrabpassConfig = {
     algorithm: jwt.Algorithm;
     accessTokenExpiresIn: string;
     refreshTokenExpiresIn: string;
-    secret: string;
+    secret?: jwt.Secret;
+    publicKey?: jwt.PublicKey;
+    privateKey?: jwt.PrivateKey;
 };
 export type GrabpassConstructorArgs = {
-    config: Partial<Omit<GrabpassConfig, 'secret'>> & {
-        secret: string;
-    };
+    config: PartialGrabpassConfig;
 };
+type PartialGrabpassConfig = Partial<GrabpassConfig>;
 export declare class Grabpass {
     private config;
     constructor(args: GrabpassConstructorArgs);
-    createAuthTokens({ accessTokenPayload, refreshTokenPayload, config }: {
-        accessTokenPayload: AccessTokenPayload;
-        refreshTokenPayload: RefreshTokenPayload;
-        config?: Partial<GrabpassConfig>;
+    createAuthTokens({ accessTokenData, refreshTokenData }: {
+        accessTokenData: AccessTokenData;
+        refreshTokenData: RefreshTokenData;
     }): AuthTokens;
-    verifyAccessToken(token: string): AccessTokenPayload;
-    verifyRefreshToken(token: string): RefreshTokenPayload;
-    private verifyToken;
+    verifyAccessToken(token: string, config?: PartialGrabpassConfig): AccessTokenPayload;
+    verifyRefreshToken(token: string, config?: PartialGrabpassConfig): RefreshTokenPayload;
+    private getSignKey;
+    private getVerifyKey;
     private validateConfig;
+    private validateHmacSecretLength;
+    private verifyToken;
 }
+export {};

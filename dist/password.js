@@ -24,12 +24,20 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createHashedPassword = createHashedPassword;
+exports.createHashedPasswordSync = createHashedPasswordSync;
 exports.comparePassword = comparePassword;
+exports.comparePasswordSync = comparePasswordSync;
 const bcrypt = __importStar(require("bcrypt"));
 function createHashedPassword(plain, saltRounds = 10) {
     return bcrypt.hash(plain, saltRounds);
 }
+function createHashedPasswordSync(plain, saltRounds = 10) {
+    return bcrypt.hashSync(plain, saltRounds);
+}
 function comparePassword(plain, hashed) {
     return bcrypt.compare(plain, hashed);
+}
+function comparePasswordSync(plain, hashed) {
+    return bcrypt.compareSync(plain, hashed);
 }
 //# sourceMappingURL=password.js.map
