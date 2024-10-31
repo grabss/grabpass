@@ -1,40 +1,30 @@
-import * as jwt from 'jsonwebtoken'
-import {
-  Grabpass,
-  GrabpassConfig,
-  GrabpassConstructorArgs,
-  AuthTokens
-} from './grabpass'
+import { randomBytes } from 'crypto'
+import { Grabpass, GrabpassConfig, AuthTokens } from './grabpass'
+
+const DEFAULT_TEST_CONFIG: GrabpassConfig = {
+  algorithm: 'HS256',
+  accessTokenExpiresIn: '30m',
+  refreshTokenExpiresIn: '30d',
+  secret: randomBytes(32 / 2).toString('hex')
+}
+
+const DEFAULT_TEST_TOKEN_DATA = {
+  payload: { id: 1 }
+}
 
 describe('Grabpass', () => {
-  const defaultConfig: GrabpassConfig = {
-    algorithm: 'HS256',
-    accessTokenExpiresIn: '30m',
-    refreshTokenExpiresIn: '30d',
-    secret: 'gW9CK0A1N5WlB3JWrUvObH9IjLH8eIfq'
-  }
-
-  const constructorArgs: GrabpassConstructorArgs = {
-    config: defaultConfig
-  }
-
   let grabpass: Grabpass
 
   beforeEach(() => {
-    grabpass = new Grabpass(constructorArgs)
+    grabpass = new Grabpass({
+      config: DEFAULT_TEST_CONFIG
+    })
   })
 
   it('should create auth tokens', () => {
-    const accessTokenData = {
-      payload: { id: 1 }
-    }
-    const refreshTokenData = {
-      payload: { id: 1 }
-    }
-
     const tokens: AuthTokens = grabpass.createAuthTokens({
-      accessTokenData,
-      refreshTokenData
+      accessTokenData: DEFAULT_TEST_TOKEN_DATA,
+      refreshTokenData: DEFAULT_TEST_TOKEN_DATA
     })
 
     expect(tokens).toHaveProperty('accessToken')
@@ -42,16 +32,9 @@ describe('Grabpass', () => {
   })
 
   it('should verify access token', () => {
-    const accessTokenData = {
-      payload: { id: 1 }
-    }
-    const refreshTokenData = {
-      payload: { id: 1 }
-    }
-
     const tokens: AuthTokens = grabpass.createAuthTokens({
-      accessTokenData,
-      refreshTokenData
+      accessTokenData: DEFAULT_TEST_TOKEN_DATA,
+      refreshTokenData: DEFAULT_TEST_TOKEN_DATA
     })
 
     const verifiedPayload = grabpass.verifyAccessToken(tokens.accessToken)
@@ -59,16 +42,9 @@ describe('Grabpass', () => {
   })
 
   it('should verify refresh token', () => {
-    const accessTokenData = {
-      payload: { id: 1 }
-    }
-    const refreshTokenData = {
-      payload: { id: 1 }
-    }
-
     const tokens: AuthTokens = grabpass.createAuthTokens({
-      accessTokenData,
-      refreshTokenData
+      accessTokenData: DEFAULT_TEST_TOKEN_DATA,
+      refreshTokenData: DEFAULT_TEST_TOKEN_DATA
     })
 
     const verifiedPayload = grabpass.verifyRefreshToken(tokens.refreshToken)
@@ -77,8 +53,8 @@ describe('Grabpass', () => {
 
   it('should throw error for invalid algorithm', () => {
     const invalidConfig: GrabpassConfig = {
-      ...defaultConfig,
-      algorithm: 'none' as jwt.Algorithm
+      ...DEFAULT_TEST_CONFIG,
+      algorithm: 'none'
     }
 
     expect(() => new Grabpass({ config: invalidConfig })).toThrow(
@@ -88,7 +64,7 @@ describe('Grabpass', () => {
 
   it('should throw error for short secret with HS256', () => {
     const invalidConfig: GrabpassConfig = {
-      ...defaultConfig,
+      ...DEFAULT_TEST_CONFIG,
       secret: 'short'
     }
 
@@ -99,7 +75,7 @@ describe('Grabpass', () => {
 
   it('should throw error for missing secret with HMAC algorithms', () => {
     const invalidConfig: GrabpassConfig = {
-      ...defaultConfig,
+      ...DEFAULT_TEST_CONFIG,
       secret: undefined
     }
 
@@ -110,7 +86,7 @@ describe('Grabpass', () => {
 
   it('should throw error for missing keys with RSA/ECDSA algorithms', () => {
     const invalidConfig: GrabpassConfig = {
-      ...defaultConfig,
+      ...DEFAULT_TEST_CONFIG,
       algorithm: 'RS256'
     }
 
