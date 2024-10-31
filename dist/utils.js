@@ -25,13 +25,13 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createHmacToken = createHmacToken;
 const crypto = __importStar(require("crypto"));
-function createHmacToken(data) {
+function createHmacToken(data, algorithm = 'sha256', encoding = 'hex') {
     const createdAt = new Date();
     return {
         token: crypto
-            .createHmac('sha256', String(createdAt.getTime()))
+            .createHmac(algorithm, String(createdAt.getTime()))
             .update(data)
-            .digest('hex'),
+            .digest(encoding),
         createdAt
     };
 }
