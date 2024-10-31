@@ -26,7 +26,8 @@
   "scripts": {
     "build": "tsc -b -v",
     "lint": "prettier --check . && eslint .",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "test": "jest"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
@@ -47,5 +48,9 @@
   "dependencies": {
     "bcrypt": "^5.1.1",
     "jsonwebtoken": "^9.0.2"
+  },
+  "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "node"
   }
 }
