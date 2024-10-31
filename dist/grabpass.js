@@ -78,6 +78,9 @@ class Grabpass {
             }
             return;
         }
+        if (config.algorithm === 'none') {
+            throw new Error('Algorithm "none" is not allowed.');
+        }
         switch (config.algorithm) {
             case 'HS256': {
                 if (config.secret.length < 32) {
