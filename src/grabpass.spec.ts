@@ -74,4 +74,15 @@ describe('Grabpass', () => {
     const verifiedPayload = grabpass.verifyRefreshToken(tokens.refreshToken)
     expect(verifiedPayload).toHaveProperty('id', 1)
   })
+
+  it('should throw error for invalid algorithm', () => {
+    const invalidConfig: GrabpassConfig = {
+      ...defaultConfig,
+      algorithm: 'none' as jwt.Algorithm
+    }
+
+    expect(() => new Grabpass({ config: invalidConfig })).toThrow(
+      'Algorithm "none" is not allowed.'
+    )
+  })
 })
