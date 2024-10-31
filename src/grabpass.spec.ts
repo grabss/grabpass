@@ -57,4 +57,21 @@ describe('Grabpass', () => {
     const verifiedPayload = grabpass.verifyAccessToken(tokens.accessToken)
     expect(verifiedPayload).toHaveProperty('id', 1)
   })
+
+  it('should verify refresh token', () => {
+    const accessTokenData = {
+      payload: { id: 1 }
+    }
+    const refreshTokenData = {
+      payload: { id: 1 }
+    }
+
+    const tokens: AuthTokens = grabpass.createAuthTokens({
+      accessTokenData,
+      refreshTokenData
+    })
+
+    const verifiedPayload = grabpass.verifyRefreshToken(tokens.refreshToken)
+    expect(verifiedPayload).toHaveProperty('id', 1)
+  })
 })
