@@ -107,4 +107,15 @@ describe('Grabpass', () => {
       'Secret is required when using HMAC algorithm.'
     )
   })
+
+  it('should throw error for missing keys with RSA/ECDSA algorithms', () => {
+    const invalidConfig: GrabpassConfig = {
+      ...defaultConfig,
+      algorithm: 'RS256'
+    }
+
+    expect(() => new Grabpass({ config: invalidConfig })).toThrow(
+      'Both private and public keys are required for RSA/ECDSA algorithms.'
+    )
+  })
 })
