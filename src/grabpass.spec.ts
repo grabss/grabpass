@@ -96,4 +96,15 @@ describe('Grabpass', () => {
       'Secret must be at least 32 characters long when using HS256 algorithm.'
     )
   })
+
+  it('should throw error for missing secret with HMAC algorithms', () => {
+    const invalidConfig: GrabpassConfig = {
+      ...defaultConfig,
+      secret: undefined
+    }
+
+    expect(() => new Grabpass({ config: invalidConfig })).toThrow(
+      'Secret is required when using HMAC algorithm.'
+    )
+  })
 })
