@@ -9,18 +9,18 @@ export type AccessTokenPayload = {
   id: number
 }
 
-export type AccessTokenData = {
-  payload: AccessTokenPayload
-  config?: Partial<GrabpassConfig>
-}
-
 export type RefreshTokenPayload = {
   id: number
 }
 
+export type AccessTokenData = {
+  payload: AccessTokenPayload
+  config?: PartialGrabpassConfig
+}
+
 export type RefreshTokenData = {
   payload: RefreshTokenPayload
-  config?: Partial<GrabpassConfig>
+  config?: PartialGrabpassConfig
 }
 
 export type GrabpassConfig = {
@@ -33,8 +33,10 @@ export type GrabpassConfig = {
 }
 
 export type GrabpassConstructorArgs = {
-  config: Partial<GrabpassConfig>
+  config: PartialGrabpassConfig
 }
+
+type PartialGrabpassConfig = Partial<GrabpassConfig>
 
 const DEFAULT_GRABPASS_CONFIG = {
   algorithm: 'HS256' as jwt.Algorithm,
@@ -91,11 +93,11 @@ export class Grabpass {
     }
   }
 
-  verifyAccessToken(token: string, config?: Partial<GrabpassConfig>) {
+  verifyAccessToken(token: string, config?: PartialGrabpassConfig) {
     return this.verifyToken<AccessTokenPayload>(token, config)
   }
 
-  verifyRefreshToken(token: string, config?: Partial<GrabpassConfig>) {
+  verifyRefreshToken(token: string, config?: PartialGrabpassConfig) {
     return this.verifyToken<RefreshTokenPayload>(token, config)
   }
 
@@ -200,7 +202,7 @@ export class Grabpass {
     }
   }
 
-  private verifyToken<T>(token: string, config?: Partial<GrabpassConfig>) {
+  private verifyToken<T>(token: string, config?: PartialGrabpassConfig) {
     const verifyConfig = {
       ...this.config,
       ...config

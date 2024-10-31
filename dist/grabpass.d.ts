@@ -6,16 +6,16 @@ export type AuthTokens = {
 export type AccessTokenPayload = {
     id: number;
 };
-export type AccessTokenData = {
-    payload: AccessTokenPayload;
-    config?: Partial<GrabpassConfig>;
-};
 export type RefreshTokenPayload = {
     id: number;
 };
+export type AccessTokenData = {
+    payload: AccessTokenPayload;
+    config?: PartialGrabpassConfig;
+};
 export type RefreshTokenData = {
     payload: RefreshTokenPayload;
-    config?: Partial<GrabpassConfig>;
+    config?: PartialGrabpassConfig;
 };
 export type GrabpassConfig = {
     algorithm: jwt.Algorithm;
@@ -26,8 +26,9 @@ export type GrabpassConfig = {
     privateKey?: jwt.PrivateKey;
 };
 export type GrabpassConstructorArgs = {
-    config: Partial<GrabpassConfig>;
+    config: PartialGrabpassConfig;
 };
+type PartialGrabpassConfig = Partial<GrabpassConfig>;
 export declare class Grabpass {
     private config;
     constructor(args: GrabpassConstructorArgs);
@@ -35,11 +36,12 @@ export declare class Grabpass {
         accessTokenData: AccessTokenData;
         refreshTokenData: RefreshTokenData;
     }): AuthTokens;
-    verifyAccessToken(token: string, config?: Partial<GrabpassConfig>): AccessTokenPayload;
-    verifyRefreshToken(token: string, config?: Partial<GrabpassConfig>): RefreshTokenPayload;
+    verifyAccessToken(token: string, config?: PartialGrabpassConfig): AccessTokenPayload;
+    verifyRefreshToken(token: string, config?: PartialGrabpassConfig): RefreshTokenPayload;
     private getSignKey;
     private getVerifyKey;
     private validateConfig;
     private validateHmacSecretLength;
     private verifyToken;
 }
+export {};
