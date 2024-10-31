@@ -5,7 +5,7 @@ import {
   comparePasswordSync
 } from './password'
 
-describe('Password utilities', () => {
+describe('Password', () => {
   const plainPassword = 'password'
   const saltRounds = 10
 
