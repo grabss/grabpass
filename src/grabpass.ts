@@ -83,7 +83,7 @@ export class Grabpass {
         }
       ),
       refreshToken: jwt.sign(
-        refreshTokenData,
+        refreshTokenData.payload,
         this.getSignKey(refreshTokenConfig),
         {
           algorithm: refreshTokenConfig.algorithm,
