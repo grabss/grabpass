@@ -27,7 +27,8 @@
     "build": "tsc -b -v",
     "lint": "prettier --check . && eslint .",
     "format": "prettier --write .",
-    "test": "jest"
+    "test": "jest",
+    "prepare": "npm run build"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
