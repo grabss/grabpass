@@ -28,7 +28,7 @@ export type GrabpassConfig = {
 export type GrabpassConstructorArgs = {
     config: PartialGrabpassConfig;
 };
-type PartialGrabpassConfig = Partial<GrabpassConfig>;
+export type PartialGrabpassConfig = Partial<GrabpassConfig>;
 export declare class Grabpass {
     private config;
     constructor(args: GrabpassConstructorArgs);
@@ -38,10 +38,9 @@ export declare class Grabpass {
     }): AuthTokens;
     verifyAccessToken(token: string, config?: PartialGrabpassConfig): AccessTokenPayload;
     verifyRefreshToken(token: string, config?: PartialGrabpassConfig): RefreshTokenPayload;
+    private verifyToken;
     private getSignKey;
     private getVerifyKey;
     private validateConfig;
     private validateHmacSecretLength;
-    private verifyToken;
 }
-export {};

@@ -36,7 +36,7 @@ export type GrabpassConstructorArgs = {
   config: PartialGrabpassConfig
 }
 
-type PartialGrabpassConfig = Partial<GrabpassConfig>
+export type PartialGrabpassConfig = Partial<GrabpassConfig>
 
 const DEFAULT_GRABPASS_CONFIG = {
   algorithm: 'HS256' as jwt.Algorithm,
@@ -93,12 +93,28 @@ export class Grabpass {
     }
   }
 
-  verifyAccessToken(token: string, config?: PartialGrabpassConfig) {
+  verifyAccessToken(
+    token: string,
+    config?: PartialGrabpassConfig
+  ): AccessTokenPayload {
     return this.verifyToken<AccessTokenPayload>(token, config)
   }
 
-  verifyRefreshToken(token: string, config?: PartialGrabpassConfig) {
+  verifyRefreshToken(
+    token: string,
+    config?: PartialGrabpassConfig
+  ): RefreshTokenPayload {
     return this.verifyToken<RefreshTokenPayload>(token, config)
+  }
+
+  private verifyToken<T>(token: string, config?: PartialGrabpassConfig): T {
+    const verifyConfig = {
+      ...this.config,
+      ...config
+    }
+    this.validateConfig(verifyConfig)
+
+    return jwt.verify(token, this.getVerifyKey(verifyConfig)) as T
   }
 
   private getSignKey(config: GrabpassConfig): jwt.Secret | jwt.PrivateKey {
@@ -129,7 +145,7 @@ export class Grabpass {
     }
   }
 
-  private validateConfig(config: GrabpassConfig | GrabpassConfig[]) {
+  private validateConfig(config: GrabpassConfig | GrabpassConfig[]): void {
     if (process.env.NODE_ENV === 'development') return
 
     if (Array.isArray(config)) {
@@ -173,7 +189,7 @@ export class Grabpass {
   private validateHmacSecretLength(
     secret: string,
     algorithm: 'HS256' | 'HS384' | 'HS512'
-  ) {
+  ): void {
     switch (algorithm) {
       case 'HS256': {
         if (secret.length < 32) {
@@ -200,15 +216,5 @@ export class Grabpass {
         break
       }
     }
-  }
-
-  private verifyToken<T>(token: string, config?: PartialGrabpassConfig) {
-    const verifyConfig = {
-      ...this.config,
-      ...config
-    }
-    this.validateConfig(verifyConfig)
-
-    return jwt.verify(token, this.getVerifyKey(verifyConfig)) as T
   }
 }

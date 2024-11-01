@@ -66,6 +66,14 @@ class Grabpass {
     verifyRefreshToken(token, config) {
         return this.verifyToken(token, config);
     }
+    verifyToken(token, config) {
+        const verifyConfig = {
+            ...this.config,
+            ...config
+        };
+        this.validateConfig(verifyConfig);
+        return jwt.verify(token, this.getVerifyKey(verifyConfig));
+    }
     getSignKey(config) {
         if (config.algorithm.startsWith('HS')) {
             if (!config.secret) {
@@ -152,14 +160,6 @@ class Grabpass {
                 break;
             }
         }
-    }
-    verifyToken(token, config) {
-        const verifyConfig = {
-            ...this.config,
-            ...config
-        };
-        this.validateConfig(verifyConfig);
-        return jwt.verify(token, this.getVerifyKey(verifyConfig));
     }
 }
 exports.Grabpass = Grabpass;
