@@ -1,4 +1,5 @@
 import * as jwt from 'jsonwebtoken'
+import type { StringValue } from 'ms'
 
 export type AuthTokens = {
   accessToken: string
@@ -25,8 +26,8 @@ export type RefreshTokenData = {
 
 export type GrabpassConfig = {
   algorithm: jwt.Algorithm
-  accessTokenExpiresIn: string
-  refreshTokenExpiresIn: string
+  accessTokenExpiresIn: StringValue
+  refreshTokenExpiresIn: StringValue
   secret?: jwt.Secret
   publicKey?: jwt.PublicKey
   privateKey?: jwt.PrivateKey
@@ -40,8 +41,8 @@ export type PartialGrabpassConfig = Partial<GrabpassConfig>
 
 const DEFAULT_GRABPASS_CONFIG = {
   algorithm: 'HS256' as jwt.Algorithm,
-  accessTokenExpiresIn: '30m',
-  refreshTokenExpiresIn: '30d'
+  accessTokenExpiresIn: '30m' as StringValue,
+  refreshTokenExpiresIn: '30d' as StringValue
 }
 
 export class Grabpass {
