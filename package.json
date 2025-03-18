@@ -59,10 +59,5 @@
     "verbose": true
   },
   "packageManager": "pnpm@9.15.4",
-  "engines": {
-    "pnpm": "9.15.4",
-    "npm": "please_use_pnpm_instead",
-    "yarn": "please_use_pnpm_instead"
-  },
   "type": "module"
 }
