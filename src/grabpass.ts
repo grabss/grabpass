@@ -6,13 +6,9 @@ export type AuthTokens = {
   refreshToken: string
 }
 
-export type AccessTokenPayload = {
-  id: number
-}
+export type AccessTokenPayload = string | Buffer | object
 
-export type RefreshTokenPayload = {
-  id: number
-}
+export type RefreshTokenPayload = string | Buffer | object
 
 export type AccessTokenData = {
   payload: AccessTokenPayload
