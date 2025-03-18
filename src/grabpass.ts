@@ -39,10 +39,13 @@ export type GrabpassConstructorArgs = {
 
 export type PartialGrabpassConfig = Partial<GrabpassConfig>
 
-const DEFAULT_GRABPASS_CONFIG = {
-  algorithm: 'HS256' as jwt.Algorithm,
-  accessTokenExpiresIn: '30m' as StringValue,
-  refreshTokenExpiresIn: '30d' as StringValue
+const DEFAULT_GRABPASS_CONFIG: Pick<
+  GrabpassConfig,
+  'algorithm' | 'accessTokenExpiresIn' | 'refreshTokenExpiresIn'
+> = {
+  algorithm: 'HS256',
+  accessTokenExpiresIn: '30m',
+  refreshTokenExpiresIn: '30d'
 }
 
 export class Grabpass {
