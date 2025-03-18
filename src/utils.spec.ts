@@ -30,12 +30,12 @@ describe('Utils', () => {
 
       global.Date = jest.fn(
         () => new originalDate('2023-01-01T00:00:00Z')
-      ) as any
+      ) as never
       const result1 = createHmacToken(data)
 
       global.Date = jest.fn(
         () => new originalDate('2023-01-01T00:00:01Z')
-      ) as any
+      ) as never
       const result2 = createHmacToken(data)
 
       global.Date = originalDate
