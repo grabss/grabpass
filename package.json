@@ -58,6 +58,5 @@
     "testEnvironment": "node",
     "verbose": true
   },
-  "packageManager": "pnpm@9.15.4",
-  "type": "module"
+  "packageManager": "pnpm@9.15.4"
 }
