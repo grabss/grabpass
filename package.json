@@ -1,6 +1,6 @@
 {
   "name": "grabpass",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "A simple and minimal token-based stateless authentication for Node.js.",
   "license": "MIT",
   "author": "grabss Inc.",
