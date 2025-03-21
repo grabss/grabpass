@@ -5,3 +5,5 @@ yarn.lock
 
 # Build output
 dist/
+
+*.md

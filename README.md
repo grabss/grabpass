@@ -13,13 +13,11 @@
 ---
 
 ## Installation
-
 ```console
 npm i grabpass
 ```
 
 ## How to use
-
 ```ts
 import { Grabpass } from 'grabpass'
 
