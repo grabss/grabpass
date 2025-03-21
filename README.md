@@ -22,6 +22,33 @@ npm i grabpass
 
 ```ts
 import { Grabpass } from 'grabpass'
+
+// Create a new instance of Grabpass
+const grabpass = new Grabpass({
+  // config: PartialGrabpassConfig
+  config: {
+    algorithm: 'HS256',
+    accessTokenExpiresIn: '30m',
+    refreshTokenExpiresIn: '30d',
+    secret: 'your-secret-4a1425c50f8b84148a39'
+  }
+})
 ```
 
-...TODO
+## Configuration
+```ts
+type GrabpassConfig = {
+  algorithm: jwt.Algorithm
+  accessTokenExpiresIn: ms.StringValue
+  refreshTokenExpiresIn: ms.StringValue
+  secret?: jwt.Secret
+  publicKey?: jwt.PublicKey
+  privateKey?: jwt.PrivateKey
+}
+```
+
+|Property|Type|Default|Description|
+|---|---|---|---|
+|`algorithm`|`jwt.Algorithm`|`HS256`|The algorithm used for signing the JWT.|
+|`accessTokenExpiresIn`|`ms.StringValue`|`30m`| Expiration time for access token.|
+|`refreshTokenExpiresIn`|`ms.StringValue`|`30d`| Expiration time for refresh token.|
