@@ -1,5 +1,5 @@
 import * as jwt from 'jsonwebtoken'
-import type { StringValue } from 'ms'
+import * as ms from 'ms'
 
 export type AuthTokens = {
   accessToken: string
@@ -22,8 +22,8 @@ export type RefreshTokenData = {
 
 export type GrabpassConfig = {
   algorithm: jwt.Algorithm
-  accessTokenExpiresIn: StringValue
-  refreshTokenExpiresIn: StringValue
+  accessTokenExpiresIn: ms.StringValue
+  refreshTokenExpiresIn: ms.StringValue
   secret?: jwt.Secret
   publicKey?: jwt.PublicKey
   privateKey?: jwt.PrivateKey
@@ -146,8 +146,6 @@ export class Grabpass {
   }
 
   private validateConfig(config: GrabpassConfig | GrabpassConfig[]): void {
-    if (process.env.NODE_ENV === 'development') return
-
     if (Array.isArray(config)) {
       for (const c of config) {
         this.validateConfig(c)
