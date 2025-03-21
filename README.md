@@ -47,6 +47,6 @@ type GrabpassConfig = {
 
 |Property|Type|Default|Description|
 |---|---|---|---|
-|`algorithm`|`jwt.Algorithm`|`HS256`|The algorithm used for signing the JWT.|
+|`algorithm`|`jwt.Algorithm`|`HS256`|The algorithm used for signing the JWT.<br>See [Algorithms Supported](https://github.com/auth0/node-jsonwebtoken#algorithms-supported) for more details.|
 |`accessTokenExpiresIn`|`ms.StringValue`|`30m`| Expiration time for access token.|
 |`refreshTokenExpiresIn`|`ms.StringValue`|`30d`| Expiration time for refresh token.|
