@@ -146,8 +146,6 @@ export class Grabpass {
   }
 
   private validateConfig(config: GrabpassConfig | GrabpassConfig[]): void {
-    if (process.env.NODE_ENV === 'development') return
-
     if (Array.isArray(config)) {
       for (const c of config) {
         this.validateConfig(c)
