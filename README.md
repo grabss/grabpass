@@ -18,6 +18,8 @@ npm i grabpass
 ```
 
 ## How to use
+***grabpass*** provides a simple way to generate and verify access and refresh tokens with customizable configuration options.
+
 ```ts
 import { Grabpass } from 'grabpass'
 
@@ -31,6 +33,32 @@ const grabpass = new Grabpass({
     secret: 'your-secret-4a1425c50f8b84148a39'
   }
 })
+
+// Create auth tokens
+const tokens = grabpass.createAuthTokens({
+  accessTokenData: {
+    payload: { userId: 123 }
+  },
+  refreshTokenData: {
+    payload: { userId: 123 }
+  }
+})
+
+// Verify access token
+try {
+  const payload = grabpass.verifyAccessToken(tokens.accessToken)
+  console.log('Verified Payload:', payload)
+} catch (e) {
+  console.error('Invalid Token:', e)
+}
+
+// Verify refresh token
+try {
+  const payload = grabpass.verifyRefreshToken(tokens.refreshToken)
+  console.log('Verified Payload:', payload)
+} catch (e) {
+  console.error('Invalid Token:', e)
+}
 ```
 
 ## Configuration
@@ -56,9 +84,11 @@ type GrabpassConfig = {
 |**publicKey**|`jwt.PublicKey`|-|The public key used for verifying tokens. Required if algorithm is asymmetric (e.g., RS256).|
 |**privateKey**|`jwt.PublicKey`|-|The private key used for signing tokens. Required if algorithm is asymmetric (e.g., RS256).|
 
-### Overriding Configuration per Operation
+### Overriding configuration per operation
 Customize settings for individual operations by passing a config object to the method:
 ```ts
+import { Grabpass } from 'grabpass'
+
 const tokens = grabpass.createAuthTokens({
   accessTokenData: {
     payload: { userId: 123 },
@@ -75,4 +105,22 @@ const tokens = grabpass.createAuthTokens({
     }
   }
 })
+
+try {
+  const payload = grabpass.verifyAccessToken(tokens.accessToken, {
+    secret: 'custom-secret-key-1fa03e3bd39f1f' // Use a different secret
+  })
+  console.log('Verified Payload:', payload)
+} catch (e) {
+  console.error('Invalid Token:', e)
+}
+
+try {
+  const payload = grabpass.verifyRefreshToken(tokens.refreshToken, {
+    secret: 'custom-secret-key-bf21899e3f6b70' // Use a different secret
+  })
+  console.log('Verified Payload:', payload)
+} catch (e) {
+  console.error('Invalid Token:', e)
+}
 ```
