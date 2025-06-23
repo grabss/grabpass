@@ -1,5 +1,8 @@
-import { randomBytes } from 'crypto'
-import { Grabpass, GrabpassConfig, AuthTokens } from './grabpass'
+import { randomBytes } from 'node:crypto'
+
+import type { AuthTokens, GrabpassConfig } from './grabpass'
+
+import { Grabpass } from './grabpass'
 
 const DEFAULT_TEST_CONFIG: GrabpassConfig = {
   algorithm: 'HS256',

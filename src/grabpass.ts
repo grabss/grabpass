@@ -1,5 +1,5 @@
 import * as jwt from 'jsonwebtoken'
-import * as ms from 'ms'
+import type * as ms from 'ms'
 
 export type AuthTokens = {
   accessToken: string

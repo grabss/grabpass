@@ -1,8 +1,8 @@
 import {
-  createHashedPassword,
-  createHashedPasswordSync,
   comparePassword,
-  comparePasswordSync
+  comparePasswordSync,
+  createHashedPassword,
+  createHashedPasswordSync
 } from './password'
 
 describe('Password', () => {
