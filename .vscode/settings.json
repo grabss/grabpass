@@ -10,7 +10,7 @@
   "eslint.format.enable": false,
   "files.insertFinalNewline": true,
   "files.trimTrailingWhitespace": true,
-  "npm.packageManager": "yarn",
+  "npm.packageManager": "pnpm",
   "[javascript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
