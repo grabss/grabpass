@@ -1,20 +1,19 @@
-<h3 align="center">grabpass</h3>
+<div align="center">
 
-<p align="center">
-  A simple and minimal token-based stateless authentication for Node.js.
-</p>
+# grabcss
 
-<p align="center">
-  <a href="https://github.com/grabss/grabpass/actions/workflows/test.yml" target="_blank"><img src="https://github.com/grabss/grabpass/actions/workflows/test.yml/badge.svg" alt="Test Status" /></a>
-  <a href="https://www.npmjs.com/package/grabpass" target="_blank"><img src="https://img.shields.io/npm/v/grabpass.svg" alt="NPM Version" /></a>
-  <a href="https://www.npmjs.com/package/grabpass" target="_blank"><img src="https://img.shields.io/npm/l/grabpass.svg" alt="Package License" /></a>
-</p>
+*A simple and minimal token-based stateless authentication for Node.js.*
 
----
+[![Test Status](https://github.com/grabss/grabpass/actions/workflows/test.yml/badge.svg)](https://github.com/grabss/grabpass/actions/workflows/test.yml)
+[![NPM Version](https://img.shields.io/npm/v/grabpass.svg)](https://www.npmjs.com/package/grabpass)
+[![License](https://img.shields.io/npm/l/grabpass.svg)](https://www.npmjs.com/package/grabpass)
+
+</div>
 
 ## Installation
-```console
-npm i grabpass
+
+```bash
+npm install grabcss
 ```
 
 ## How to use
