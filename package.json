@@ -26,7 +26,8 @@
   "scripts": {
     "build": "tsc -b -v",
     "lint": "biome check .",
-    "format": "biome format --write .",
+    "lint:fix": "biome check --write .",
+    "lint:ci": "biome ci .",
     "test": "jest",
     "prepare": "npm run build"
   },
