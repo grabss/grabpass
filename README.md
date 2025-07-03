@@ -6,7 +6,7 @@
 
 [![Test Status](https://github.com/grabss/grabpass/actions/workflows/test.yml/badge.svg)](https://github.com/grabss/grabpass/actions/workflows/test.yml)
 [![NPM Version](https://img.shields.io/npm/v/grabpass.svg)](https://www.npmjs.com/package/grabpass)
-[![License](https://img.shields.io/npm/l/grabpass.svg)](https://www.npmjs.com/package/grabpass)
+[![License](https://img.shields.io/npm/l/grabpass.svg)](https://github.com/grabss/grabpass/blob/main/LICENSE)
 
 </div>
 
