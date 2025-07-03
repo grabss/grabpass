@@ -1,6 +1,6 @@
 <div align="center">
 
-# grabcss
+# grabpass
 
 *A simple and minimal token-based stateless authentication for Node.js.*
 
@@ -13,7 +13,7 @@
 ## Installation
 
 ```bash
-npm install grabcss
+npm install grabpass
 ```
 
 ## How to use
@@ -123,3 +123,11 @@ try {
   console.error('Invalid Token:', e)
 }
 ```
+
+## License
+
+MIT License - see [LICENSE](./LICENSE) file for details.
+
+## Contributing
+
+Contributions are welcome! Please see [CONTRIBUTING.md](./CONTRIBUTING.md) for guidelines.
