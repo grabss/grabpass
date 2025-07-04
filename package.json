@@ -24,7 +24,8 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsc -b -v",
+    "build": "npm run clean && tsc",
+    "clean": "rm -rf dist",
     "lint": "biome check .",
     "lint:fix": "biome check --write .",
     "lint:ci": "biome ci .",
