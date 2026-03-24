@@ -18,8 +18,11 @@ jobs:
         with:
           node-version: '22'
 
+      - name: Enable corepack
+        run: corepack enable
+
       - name: Install dependencies
-        run: npm install
+        run: pnpm install --frozen-lockfile
 
       - name: Run tests
-        run: npm test
+        run: pnpm test
