@@ -15,6 +15,9 @@
     "minimal",
     "auth"
   ],
+  "engines": {
+    "node": ">=18"
+  },
   "main": "dist/index.js",
   "exports": {
     ".": "./dist/index.js"
