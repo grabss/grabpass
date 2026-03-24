@@ -47,7 +47,7 @@
   "dependencies": {
     "@types/jsonwebtoken": "^9.0.7",
     "bcrypt": "^6.0.0",
-    "jsonwebtoken": "^9.0.2"
+    "jsonwebtoken": "^9.0.3"
   },
   "jest": {
     "preset": "ts-jest",
@@ -57,8 +57,7 @@
   "packageManager": "pnpm@10.12.1",
   "pnpm": {
     "overrides": {
-      "minimatch@<3.1.4": "3.1.4",
-      "jws@<3.2.3": "3.2.3"
+      "minimatch@<3.1.4": "3.1.4"
     }
   }
 }
