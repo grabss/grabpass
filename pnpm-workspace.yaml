@@ -1,2 +1,11 @@
-onlyBuiltDependencies:
-  - bcrypt
+allowBuilds:
+  bcrypt: true
+
+overrides:
+  minimatch@<3.1.4: '3.1.4'
+  js-yaml@<3.15.0: '3.15.0'
+  diff@<4.0.4: '4.0.4'
+  handlebars@<4.7.9: '4.7.9'
+  picomatch@<2.3.2: '2.3.2'
+  brace-expansion@<1.1.13: '1.1.13'
+  '@babel/core@<7.29.6': '7.29.6'
