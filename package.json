@@ -16,7 +16,7 @@
     "auth"
   ],
   "engines": {
-    "node": ">=18"
+    "node": ">=24"
   },
   "main": "dist/index.js",
   "exports": {
