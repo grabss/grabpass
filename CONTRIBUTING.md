@@ -3,7 +3,7 @@
 ## Prerequisites
 
 - Node.js >=24.0.0
-- pnpm ^10.12.1
+- pnpm ^11.9.0
 
 ## Development Setup
 
